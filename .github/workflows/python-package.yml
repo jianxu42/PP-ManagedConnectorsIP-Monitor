@@ -38,3 +38,11 @@ jobs:
       - name: Test
         run: |
           python main.py
+      - name: Upload file
+        uses: actions/upload-artifact@v3
+        with:
+          name: managedConnectorsIP
+          path: |
+            ./managedConnectorsIP.txt
+          if-no-files-found: ignore
+          retention-days: 1
