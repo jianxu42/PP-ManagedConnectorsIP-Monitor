@@ -1,3 +1,5 @@
+import difflib as dl
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -19,14 +21,21 @@ for table in find_tables:
         for i in rows:
             table_data = i.find_all('td')
             data = [j.text for j in table_data]
+            # data.append("foo")
             if len(data) != 0:
-                managedConnectorsIP.append(data)
+                managedConnectorsIP.append(" ".join(data))
 
 # compare the realtime data with previous saved data
 with open("managedConnectorsIP.txt", "r+") as read_file:
-    if str(managedConnectorsIP) != read_file.read():
+    read_file_data = read_file.read()
+    managedConnectorsIP_str = '\n'.join(managedConnectorsIP)
+
+    if read_file_data != managedConnectorsIP_str:
         # we can notify with email or other ways
         print("Got changes in the web page!")
+        # diff the data
+        for diff in dl.ndiff(managedConnectorsIP_str, read_file_data):
+            print(diff)
         # replace with the new data
         with open("managedConnectorsIP.txt", "w") as write_file:
-            write_file.writelines(str(managedConnectorsIP))
+            write_file.writelines(managedConnectorsIP_str)
