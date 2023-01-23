@@ -34,7 +34,7 @@ with open("managedConnectorsIP.txt", "r+") as read_file:
         # we can notify with email or other ways
         print("Got changes in the web page!")
         # diff the data
-        for diff in dl.ndiff(managedConnectorsIP_str, read_file_data):
+        for diff in dl.unified_diff(managedConnectorsIP_str, read_file_data):
             print(diff)
         # replace with the new data
         with open("managedConnectorsIP.txt", "w") as write_file:
